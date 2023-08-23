@@ -41,6 +41,7 @@ tensors[inp_name] = np.zeros(tensors[inp_name].shape)
 
 for layer in onnx_model.graph.node:
     try:
+        print(layer.name)
         op = getattr(ops, layer.op_type)
     except AttributeError:
         raise NotImplementedError(layer.op_type)
