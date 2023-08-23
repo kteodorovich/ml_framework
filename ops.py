@@ -1,6 +1,10 @@
 import numpy as np
 from numpy.typing import ArrayLike
 
+def Add(inputs: list[str], outputs: list[str], attributes: dict[str,], tensors: dict[str, ArrayLike]):
+    a = tensors[inputs[0]]
+    b = tensors[inputs[1]]
+    tensors[outputs[0]] = a + b
 
 def BatchNormalization(inputs: list[str], outputs: list[str], attributes: dict[str,], tensors: dict[str, ArrayLike]):
     inp = tensors[inputs[0]]
@@ -46,6 +50,23 @@ def Conv(inputs: list[str], outputs: list[str], attributes: dict[str,], tensors:
 
     tensors[outputs[0]] = output
 
+def GlobalAveragePool(inputs: list[str], outputs: list[str], attributes: dict[str,], tensors: dict[str, ArrayLike]):
+    inp = tensors[inputs[0]]
+    out = np.average(inp, axis=(2,3), keepdims=True)
+    tensors[outputs[0]] = out
+
 def Relu(inputs: list[str], outputs: list[str], attributes: dict[str,], tensors: dict[str, ArrayLike]):
     inp = tensors[inputs[0]]
     tensors[outputs[0]] = np.maximum(0, inp)
+
+def Reshape(inputs: list[str], outputs: list[str], attributes: dict[str,], tensors: dict[str, ArrayLike]):
+    inp = tensors[inputs[0]]
+    shape = tensors[inputs[1]].astype(np.int32)
+    for i in range(len(shape)):
+        if shape[i] == 0:
+            shape[i] = inp.shape[i]
+    tensors[outputs[0]] = inp.reshape(shape)
+
+
+
+
